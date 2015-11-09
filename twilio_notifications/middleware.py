@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from twilio.rest import TwilioRestClient
+from twilio.rest import Client
 from django.core.exceptions import MiddlewareNotUsed
 import os
 import logging
@@ -40,14 +40,12 @@ class MessageClient(object):
          twilio_auth_token) = load_twilio_config()
 
         self.twilio_number = twilio_number
-        self.twilio_client = TwilioRestClient(twilio_account_sid,
+        self.twilio_client = Client(twilio_account_sid,
                                               twilio_auth_token)
 
     def send_message(self, body, to):
-        self.twilio_client.messages.create(body=body, to=to,
-                                           from_=self.twilio_number,
-                                           # media_url=['https://demo.twilio.com/owl.png'])
-                                           )
+        self.twilio_client.api.messages.create(body=body, to=to,
+                                           from_=self.twilio_number)
 
 
 class TwilioNotificationsMiddleware(object):
